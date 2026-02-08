@@ -123,14 +123,6 @@ Donde:
 
 - **Union-Find**: Es una estructura de datos clave para Kruskal. Permite detectar ciclos de forma eficiente.
 
-## 🐛 Troubleshooting
-
-**Error: `ModuleNotFoundError: No module named 'heapq'`**
-- No debería pasar, `heapq` es parte de la biblioteca estándar de Python
-
-**El programa no muestra nada**
-- Asegurate de estar ejecutando con `python ejercicio2_mst.py` o `python ejercicio3_dijkstra.py`
-
 **Los resultados no coinciden con lo esperado**
 - Verificá que los datos del grafo estén bien ingresados
 - Recordá que puede haber múltiples MST válidos con el mismo costo
@@ -142,7 +134,3 @@ Donde:
 - [Visualización de algoritmos](https://visualgo.net/) - Excelente para entender cómo funcionan
 
 ---
-
-**Autor**: Estudiante de Programación III  
-**Fecha**: Febrero 2026  
-**Curso**: Desarrollo 2026 Verano

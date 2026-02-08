@@ -1,0 +1,124 @@
+TP1 - Ejercicio 4: Recurrencia
+
+Acá presento los ejemplos y algoritmos para los casos de sustracción y división pedidos.
+
+==================================================
+1. Método de Sustracción (T(n) = a*T(n-1) + f(n))
+==================================================
+
+--> Caso 1: a = 1
+Cuando a=1, básicamente tenemos una llamada recursiva que reduce el problema en 1.
+La recurrencia es: T(n) = T(n-1) + c
+
+Ejemplo: Suma lineal (o Factorial)
+Es el caso más simple. Para sumar números hasta n, sumo n más el resultado de n-1.
+
+Pseudocódigo:
+funcion suma(n):
+    si n es 0 devolver 0
+    devolver n + suma(n-1)
+
+Complejidad: O(n). Es lineal porque baja de 1 en 1.
+
+...
+
+--> Caso 2: a > 1
+Acá la complejidad explota porque hacemos más de 1 llamada recursiva por paso.
+Recurrencia: T(n) = 2*T(n-1) + c
+
+Ejemplo: Torres de Hanoi
+Para mover una torre de n discos, tengo que:
+1. Mover n-1 discos a la torre auxiliar.
+2. Mover el disco base al destino.
+3. Mover los n-1 discos de la auxiliar al destino.
+O sea, 2 llamadas recursivas de n-1.
+
+Pseudocódigo:
+funcion hanoi(n):
+    si n es 1, mover disco y volver
+    hanoi(n-1) // mover a aux
+    mover disco base
+    hanoi(n-1) // mover a destino
+
+Complejidad: O(2^n). Exponencial.
+
+...
+
+--> Caso 3: a < 1
+Este caso es raro de ver "literalmente" en código determinístico porque no podés hacer 0.5 llamadas. Se usa más para analizar tiempos esperados en algoritmos con probabilidad.
+Recurrencia: T(n) = 0.5 * T(n-1) + c
+
+Ejemplo: Algoritmo Probabilístico (Las Vegas)
+Supongamos que tiro una moneda. Si sale cara (50%), resuelvo el problema de una (O(1)). Si sale cruz, tengo que seguir procesando (recurrencia).
+En promedio, el problema se "achica" (o la chance de seguir baja) muy rápido.
+
+Pseudocódigo:
+funcion prob(n):
+    si random() > 0.5:
+        retornar solucion_rapida()
+    sin:
+        retornar prob(n-1)
+
+Complejidad esperada: O(1). Converge enseguida.
+
+==================================================
+2. Método de División (Teorema Maestro)
+Forma: T(n) = a * T(n/b) + O(n^k)
+==================================================
+
+--> Caso 4: a = b^k
+El costo de dividir/combinar se equilibra con el de las llamadas recursivas.
+Recurrencia: T(n) = 2 * T(n/2) + O(n)  (donde a=2, b=2, k=1 -> 2 = 2^1)
+
+Ejemplo: Merge Sort
+Partimos el array en 2 mitades, ordenamos recursivamente cada una, y después mezclamos (Merge) que cuesta O(n).
+
+Pseudocódigo:
+funcion mergeSort(arr):
+    si len(arr) <= 1 volver
+    mergeSort(mitad_izq)
+    mergeSort(mitad_der)
+    merge(mitad_izq, mitad_der)
+
+Complejidad: O(n log n).
+
+...
+
+--> Caso 5: a < b^k
+La recursión pesa menos que el trabajo de partir/combinar.
+Recurrencia: T(n) = 1 * T(n/2) + O(n)  (a=1, b=2, k=1 -> 1 < 2)
+
+Ejemplo: QuickSelect
+Queremos encontrar el k-ésimo elemento. Particionamos el array (O(n)), y nos fijamos dónde quedó el pivote. Solo hace falta buscar recursivamente en UNA de las mitades, no en las dos.
+
+Pseudocódigo:
+funcion quickSelect(arr, k):
+    pivote = particionar(arr)
+    si k == pivote, encontramos el valor
+    si k < pivote, quickSelect(lado_izq, k)
+    sino, quickSelect(lado_der, k-offset)
+
+Complejidad: O(n). (Serie geométrica decreciente).
+
+...
+
+--> Caso 6: a > b^k
+Hacemos demasiadas llamadas recursivas para lo que reducimos el problema.
+Recurrencia: T(n) = 4 * T(n/2) + O(n) (a=4, b=2 -> 4 > 2)
+
+Ejemplo: Multiplicación Naïve (Recursiva)
+Si dividimos dos números de n bits en mitades y multiplicamos "a lo bruto", terminamos haciendo 4 multiplicaciones de n/2.
+(Xl*Yl, Xl*Yr, Xr*Yl, Xr*Yr).
+
+Pseudocódigo:
+funcion mult(x, y, n):
+    si n es chico, multiplicar directo
+    // dividir x en xl, xr
+    // dividir y en yl, yr
+    p1 = mult(xl, yl, n/2)
+    p2 = mult(xl, yr, n/2)
+    p3 = mult(xr, yl, n/2)
+    p4 = mult(xr, yr, n/2)
+    combinar(p1, p2, p3, p4)
+
+Complejidad: O(n^2). (De acá sale Karatsuba para optimizarlo a 3 llamadas).
